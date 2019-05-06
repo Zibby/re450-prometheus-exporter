@@ -96,7 +96,7 @@ func generateRouterStatus() {
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Referer", "http://192.168.0.87/index")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-	req.Header.Set("Cookie", "COOKIE=c0a8002000020800")
+	req.Header.Set("Cookie", "COOKIE=c0a8002000d41b01")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -128,7 +128,7 @@ func generateClientStatus() {
 	req.Header.Set("Accept-Language", "en-GB,en;q=0.5")
 	req.Header.Set("Referer", "http://192.168.0.87/index")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-	req.Header.Set("Cookie", "COOKIE=c0a8002000020800")
+	req.Header.Set("Cookie", "COOKIE=c0a8002000d41b01")
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
