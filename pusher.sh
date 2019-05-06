@@ -1,2 +1,2 @@
-docker build -t zibby/r450-exporter .
-docker push zibby/r450-exporter
+docker build -t zibby/re450-exporter .
+docker push zibby/re450-exporter
