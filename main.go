@@ -103,6 +103,7 @@ func generateRouterStatus() {
 		log.Info("Failed to get router status")
 	}
 	defer resp.Body.Close()
+	log.Info(resp.Body)
 
 	ret, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
