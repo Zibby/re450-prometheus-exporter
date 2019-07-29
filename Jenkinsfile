@@ -1,14 +1,40 @@
 pipeline {
+  environment {
+    registry = "zibby/re450-exporter"
+    registryCredential = 'f8a79f84-5ad0-43e4-b32c-87e2c6001a62'
+    dockerImage = ''
+  }
   agent any
   stages {
-    stage('init') {
+    stage('Clone Git') {
       steps {
-        sh './pusher.sh'
+        git 'https://github.com/Zibby/re450-prometheus-exporter'
       }
     }
-    stage('cleanup') {
+    stage('Build Image') {
       steps {
-        cleanWs(deleteDirs: true, cleanupMatrixParent: true, cleanWhenUnstable: true, cleanWhenSuccess: true, cleanWhenNotBuilt: true, cleanWhenFailure: true, cleanWhenAborted: true, disableDeferredWipeout: true)
+        script {
+          dockerImage = docker.build registry + ":" + "$env.BRANCH_NAME"
+        }
+      }
+    }
+    stage('Push Image') {
+      steps {
+        script {
+          docker.withRegistry( '', registryCredential) {
+            dockerImage.push()
+          }
+          if ("$env.BRANCH_NAME"=='master') {
+            docker.withRegistry( '', registryCredential) {
+              dockerImage.push('latest')
+            }
+          }
+        }
+      }
+    }
+    stage('clean_up') {
+      steps {
+        sh "docker rmi $registry:$env.BRANCH_NAME"
       }
     }
   }
