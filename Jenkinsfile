@@ -1,10 +1,10 @@
 pipeline {
-  environment {
-    registry = "zibby/re450-exporter"
-    registryCredential = 'f8a79f84-5ad0-43e4-b32c-87e2c6001a62'
-    dockerImage = ''
+  agent {
+    node {
+      label 'ec2-fleet'
+    }
+
   }
-  agent any
   stages {
     stage('Clone Git') {
       steps {
@@ -16,6 +16,7 @@ pipeline {
         script {
           dockerImage = docker.build registry + ":" + "$env.BRANCH_NAME"
         }
+
       }
     }
     stage('Push Image') {
@@ -30,6 +31,7 @@ pipeline {
             }
           }
         }
+
       }
     }
     stage('clean_up') {
@@ -38,12 +40,21 @@ pipeline {
       }
     }
   }
+  environment {
+    registry = 'zibby/re450-exporter'
+    registryCredential = 'f8a79f84-5ad0-43e4-b32c-87e2c6001a62'
+    dockerImage = ''
+  }
   post {
     success {
       slackSend(botUser: true, color: '#36a64f', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+
     }
+
     failure {
       slackSend(botUser: true, color: '#b70000', message: "FAIL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+
     }
+
   }
 }
